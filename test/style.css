@@ -1,0 +1,29 @@
+.coin {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    background-color: red !important;
+	text-align: center;
+	font-weight: bold;
+	font-family: sans-serif;
+	color: white;
+	margin: 10px;
+	display: inline-block;
+	line-height: 50px;
+	font-size: 20px;
+}
+
+.coinsmall {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    background-color: yellow !important;
+        text-align: center;
+        font-weight: bold;
+        font-family: sans-serif;
+        color: black;
+        margin: 10px;
+        display: inline-block;
+        line-height: 50px;
+        font-size: 20px;
+

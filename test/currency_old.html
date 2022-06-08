@@ -1,0 +1,80 @@
+<?php header ("Content-Type: text/html; charset=utf-8");?>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link type='text/css' rel='stylesheet' href='style.css'/>
+        <title>Currency Exchange Information</title>
+    </head>
+    <body>
+
+        <h2>Вычислить списание ден. средств с карты.</h2>
+
+        <form action="exchange.php" method=POST> <!--создаем форму-->
+            <!--данные формы будет обрабатывать файл 1.php, при
+            отправке запроса будет использован метод POST-->
+<table>
+<tr><td valign="top"><p><b>Введите курсы:</b></p>
+    <table>
+            <p><tr><td><a href=http://usa.visa.com/personal/card-benefits/travel/exchange-rate-calculator.jsp>Курсы Visa</a></tr>
+            <tr><td>Курс Visa 1/USD</td>          <td><input type=int name="visa_usd"
+                                                       value=0.030494 size=9></td></tr>
+            <tr><td>Курс Visa 1/EUR</td>          <td><input type=int name="visa_eur"
+                                                       value=0.025060 size=9></td></tr>
+            </p><p>  
+            <tr><td><a href=https://www.mastercard.com/global/currencyconversion/>Курс MasterCard</a></tr>
+            <tr><td>Курс MC USD</td> <td><input type=int name="mc_usd" size=9></td></tr>
+            <tr><td>Курс MC EUR</td> <td><input type=int name="mc_eur" size=9></td></tr>
+            </p><p>
+            <tr><td><a href=http://alfabank.ru/peterburg/retail/currency/>Курсы Альфа Банка</a></tr>
+            <tr><td>Курс снятия Alfa-Bank USD</td> <td><input type=int name="ab_take_usd"
+                                                 value=54 size=9></td></tr>
+            <tr><td>Курс снятия Alfa-Bank EUR</td> <td><input type=int name="ab_take_eur"
+                                                 value=68.1625 size=9></td></tr>
+
+            <tr><td>Курс оплаты Alfa-Bank USD</td> <td><input type=int name="ab_pay_usd"
+                                                 value=55.35 size=9></td></tr>
+            <tr><td>Курс оплаты Alfa-Bank EUR</td> <td><input type=int name="ab_pay_eur"
+                                                 value=66.5 size=9></td></tr>
+            </p><p>
+            <tr><td>Комиссия Alfa-Bank, %</td> <td><input type=int name="fee_ab" 
+                                                    value=1 size=9><tr>
+            </p>
+    </table>
+</td><td valign="top">       
+           <p>
+           <b>Выберите операцию:</b><p>
+            <input type=radio name="oper" value="TakeCurRub">
+                   Снимаем Local Currency с RUB. Visa. Debt<br>
+            <input type=radio name="oper" value="TakeCurUsd" checked>
+                   Снимаем Local Currency с USD. Visa. Debt<br><br>
+            <input type=radio name="oper" value="PayCurRubMC">
+                   Платим Local Currency с RUB. MasterCard. Credit<br>
+            <input type=radio name="oper" value="PayCurRubVisa">
+                   Платим Local Currency с RUB. Visa. Debt<br>
+            <input type=radio name="oper" value="PayCurUsdVisa">
+                   Платим Local Currency с USD. Visa. Debt<br><br>
+            <input type=radio name="oper" value="PayUsdRubMC">
+                   Платим USD с RUB. MasterCard. Credit<br>
+            <input type=radio name="oper" value="PayUsdRubMC">
+                   Платим USD с RUB. Visa. Debt<br>
+            <input type=radio name="oper" value="PayUsdUsdVisa">
+                   Платим USD с USD. Visa. Debt<br><br>
+            <input type=radio name="oper" value="PayEurRubMC">
+                   Платим EUR с RUB. MasterCard. Credit<br>
+            <input type=radio name="oper" value="PayEurRubMC">
+                   Платим EUR с RUB. Visa. Debt<br>
+            <input type=radio name="oper" value="PayEurUsdVisa">
+                   Платим EUR с USD. Visa. Debt<br></p>
+</td></tr>
+</table>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type=submit value="Вычислить" style="width:200Px;height:20Px"></p>
+             
+        </form>
+
+    </body>
+</html>
+
+

@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html><head>
+
+<title>Select и Input</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=Windows-1251">
+
+<style type="text/css"><!--
+
+#pets1_show {visibility:hidden;}
+
+#pets2_show {display:none;}
+
+--></style>
+
+<script type="text/javascript" src="sel.js"></script>
+
+<script type="text/javascript"><!--
+
+//
+
+function mChange1(obj){
+
+var el, s, n, v;
+
+el=obj.options;
+
+n=el.selectedIndex;
+
+v=el[n].value;
+
+s=obj.id+'_show';
+
+if(v=="????"){
+
+if(document.getElementById(s)){
+
+document.getElementById(s).style.visibility="visible";}};
+
+ };//
+
+//
+
+function mChange2(obj){
+
+var el, s, n, v;
+
+el=obj.options;
+
+n=el.selectedIndex;//индекс выбранного оптиона
+
+v=el[n].value;
+
+s=obj.id+'_show';//получить ИД поля
+
+if(v=="????"){//только если выбран нужный оптион
+
+if(document.getElementById(s)){//существует ли такой элемент?
+
+document.getElementById(s).style.display="block";}};//показать
+
+ };//
+
+--></script>
+
+</head>
+
+
+
+<body>
+
+
+
+<br><br><br><br>
+
+<div>
+
+<select name="pets1" id="pets1" style="width: 278px;" onchange="mChange1(this);">
+
+<option value="">Выберите животное...</option>
+
+<option value="собаки">Собаки</option>
+
+<option value="кошки">Кошки</option>
+
+<option value="????">????</option>
+
+</select>
+
+<br>
+
+<input type="text" value="" name="pets1_show" id="pets1_show">
+
+</div>
+
+<div>
+
+<select name="pets2" id="pets2" style="width: 278px;" onchange="mChange2(this);">
+
+<option value="">Выберите животное...</option>
+
+<option value="собаки">Собаки</option>
+
+<option value="кошки">Кошки</option>
+
+<option value="????">????</option>
+
+</select>
+
+<br>
+
+<input type="text" value="" name="pets2_show" id="pets2_show">
+
+</div>
+
+
+
+<br>
+
+<div>Привет! Я в js особо не понимаю, но хотел спросить. У меня идет 1
+
+<pre>&lt;select name=&quot;pets&quot; id=&quot;pets&quot; style=&quot;width: 278px;&quot;&gt;
+
+&lt;option value=&quot;&quot;&gt;Выберите животное...&lt;/option&gt;
+
+&lt;option value=&quot;собаки&quot;&gt;Собаки&lt;/option&gt;
+
+&lt;option value=&quot;кошки&quot;&gt;Кошки&lt;/option&gt;
+
+&lt;option value=&quot;????&quot;&gt;????&lt;/option&gt;
+
+&lt;/select&gt;</pre>
+
+<div>Хочу чтобы при нажатии на &quot;????&quot; появлялся input, чтобы дальше его в БД занести. 
+
+Как занести в БД я понимаю, а как вывести input не догнал.</div></div>
+
+
+
+
+
+</body>
+
+</html>

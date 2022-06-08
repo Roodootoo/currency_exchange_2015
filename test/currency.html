@@ -1,0 +1,245 @@
+<?php header ("Content-Type: text/html; charset=utf-8");?>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link type='text/css' rel='stylesheet' href='style.css'/>
+        <title>Currency Exchange Information</title>
+	<style>
+	    body {
+    		margin: 50; /* отступы */
+   	    }
+   	    table {
+    		//width: 50%; /* Ширина таблицы в процентах */
+   	    }
+   	    .broad {
+    		width: 20px; /* Ширина ячейки */
+   	    }
+  	</style>
+    </head>
+    <body>
+<script type="text/javascript»>
+function loadCalcInformer(u,w,b,f,a,g,c)
+	{document.write('<span id="'+u+'"></span>’);
+	var s,r,t;
+	r = false;
+	s = document.createElement('script’);
+	s.type = 'text/javascript’;
+	s.src = 'http://www.calc.ru/js/informer.js?u='+u+'&w='+w+'&b='+b+'&f='+f+'&a='+a+'&g='+g +'&c='+c;
+	s.onload = s.onreadystatechange = function() 
+		{if ( !r && (!this.readyState || this.readyState == 'complete') )
+			{r = true;}
+		};
+	t = document.getElementsByTagName('script')[0];
+	t.parentNode.insertBefore(s, t);
+	}
+loadCalcInformer('obmen-Moskva-Alfa-bank','250','0053f9','ffffff','828282','828282','000000’);
+</script>
+	<?
+	function VAL($id){
+		$cache=0;
+		$time_cache=10800; // время жизни кеша
+		$time = time();
+		if(file_exists($id)){
+			$str = file_get_contents($id);
+			$str = explode(":", $str);
+			if($str[0]<$time) {
+				$cache=1;
+			}
+			else{
+				return $str[1];
+			}
+		}
+		else{
+			$cache=1;
+		}	
+		if($cache==1){
+			date_default_timezone_set('Europe/Moscow');
+			$date = date("d/m/Y"); 
+			$link = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=$date"; 
+			$str = file_get_contents ($link);
+			preg_match('#<Valute ID="'.$id.'">.*?.<Value>(.*?)</Value>.*?</Valute>#is', $str, $value);
+			preg_match('#<Valute ID="'.$id.'">.*?.<CharCode>(.*?)</CharCode>.*?</Valute>#is', $str, $code);
+			if($value[1]!=''){
+				$write = $code[1].' '.$value[1];
+				file_put_contents($id, $time+$time_cache.':'.$write);
+				return $write;
+			}
+		}	
+	}
+	?>
+
+        <h2>Сколько снимут бабла с карты?</h2>
+
+	<form method = "post">
+        <!--<form action="exchange.php" method=POST>--> <!--создаем форму-->
+            <!--данные формы будет обрабатывать файл 1.php, при
+            отправке запроса будет использован метод POST-->
+            
+            <p><b><!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                  Введите сумму операции:</b> <input type=int name="summa" value=20000 size=20></p>
+	    <br>
+	    
+	    <table>
+            <tr>
+		<td valign="top"><p><b>Введите курсы:</b></p>
+		<table>
+        	<p>
+		    <tr><td><a href=http://usa.visa.com/personal/card-benefits/travel/exchange-rate-calculator.jsp>Курсы Visa (перейти на сайт)</a></tr>
+        	    <tr><td>Курс Visa 1/USD</td>          <td><input type=int name="visa_usd"
+                                                               size=9></td></tr>
+        	    <tr><td>Курс Visa 1/EUR</td>          <td><input type=int name="visa_eur"
+                                                               size=9></td></tr>
+                </p>
+		<p>  
+                    <tr><td><a href=https://www.mastercard.com/global/currencyconversion/>Курс MasterCard (перейти на сайт)</a></tr>
+                    <tr><td>Курс MC USD</td> <td><input type=int name="mc_usd" size=9></td></tr>
+                    <tr><td>Курс MC EUR</td> <td><input type=int name="mc_eur" size=9></td></tr>
+                </p>
+		<p>
+            	    <tr><td><a href=http://alfabank.ru/peterburg/retail/currency/>Курсы Альфа Банка (перейти на сайт)</a></tr>
+                    <tr><td>Курс снятия Alfa-Bank USD</td> <td><input type=int name="ab_take_usd"
+                                                                size=9></td></tr>
+            	    <tr><td>Курс снятия Alfa-Bank EUR</td> <td><input type=int name="ab_take_eur"
+                    		                                size=9></td></tr>
+
+                    <tr><td>Курс оплаты Alfa-Bank USD</td> <td><input type=int name="ab_pay_usd"
+                                                                size=9></td></tr>
+                    <tr><td>Курс оплаты Alfa-Bank EUR</td> <td><input type=int name="ab_pay_eur"
+                                                                size=9></td></tr>
+                </p>
+                <p>
+            	    <tr><td>Комиссия Alfa-Bank, %</td> <td><input type=int name="ab_fee" 
+                                                            value=1 size=9><tr>
+                    <tr><td>Доп коэф Alfa-Bank, %</td> <td><input type=int name="ab_fee_plus"
+                                                            value=2.5 size=9><tr>
+            	</p>
+    	        </table>
+           	</td><td class="broad"></td>
+		<td valign="top">       
+           	<p>
+           	    <b>Выберите операцию:</b><p>
+            	    <input type=radio name="oper" value="TakeCurRub">
+                   	Снимаем Local Currency с RUB. Visa. Debt<br>
+            	    <input type=radio name="oper" value="TakeCurUsd" checked>
+                   	Снимаем Local Currency с USD. Visa. Debt<br><br>
+            	    <input type=radio name="oper" value="PayCurRubMC">
+                   	Платим Local Currency с RUB. MasterCard. Credit<br>
+            	    <input type=radio name="oper" value="PayCurRubVisa">
+                   	Платим Local Currency с RUB. Visa. Debt<br>
+            	    <input type=radio name="oper" value="PayCurUsdVisa">
+                   	Платим Local Currency с USD. Visa. Debt<br><br>
+            	    <input type=radio name="oper" value="PayUsdRubMC">
+                	 Платим USD с RUB. MasterCard. Credit<br>
+            	    <input type=radio name="oper" value="PayUsdRubVisa">
+                   	Платим USD с RUB. Visa. Debt<br>
+            	    <input type=radio name="oper" value="PayUsdUsdVisa">
+                   	Платим USD с USD. Visa. Debt<br><br>
+            	    <input type=radio name="oper" value="PayEurRubMC">
+                   	Платим EUR с RUB. MasterCard. Credit<br>
+            	    <input type=radio name="oper" value="PayEurRubMC">
+                   	Платим EUR с RUB. Visa. Debt<br>
+            	    <input type=radio name="oper" value="PayEurUsdVisa">
+                   	Платим EUR с USD. Visa. Debt<br></p>
+	    </td></tr>
+	    </table>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type=submit name = "Exchange" value="Вычислить" style="width:200Px;height:20Px"></p>
+        </form>
+	
+	<br>
+	<h2>
+	<?
+	if($_POST['Exchange'])
+	{
+		$ex_summa = $_POST["summa"];
+		$ex_visa_usd = $_POST["visa_usd"];   // сохраним в этой переменной
+		$ex_visa_eur = $_POST["visa_eur"];
+		$ex_mc_usd = $_POST["mc_usd"];
+		$ex_mc_eur = $_POST["mc_eur"];
+		$ex_ab_take_usd = $_POST["ab_take_usd"];
+		$ex_ab_take_eur = $_POST["ab_take_eur"];
+		$ex_ab_pay_usd = $_POST["ab_pay_usd"];
+		$ex_ab_pay_eur = $_POST["ab_pay_eur"];
+		$ex_ab_fee = $_POST["ab_fee"];
+		$ex_ab_fee_plus = $_POST["ab_fee_plus"];
+		$ex_oper = $_POST["oper"];
+
+		switch ($ex_oper){
+		    //Снимаем Local Currency с RUB. Visa. Debt
+		    case "TakeCurRub":
+		    $ex_itog = $ex_summa / (1/$ex_visa_usd) * $ex_ab_take_usd * (1+$ex_ab_fee_plus/100) * (1+$ex_ab_fee/100);
+		    echo $ex_summa . " / (1/" . $ex_visa_usd . ") * " . $ex_ab_take_usd . " * (1 + " . $ex_ab_fee_plus . "/100) * (1 + " . $ex_ab_fee . "/100) = " . $ex_itog;
+		    break;
+		 
+		    //Снимаем Local Currency с USD. Visa. Debt
+		    case "TakeCurUsd":
+		    $ex_itog = $ex_summa / (1/$ex_visa_usd) * (1+$ex_ab_fee_plus/100) * (1+$ex_ab_fee/100);
+		    echo $ex_summa . " / (1/" . $ex_visa_usd . ") * (1 + " . $ex_ab_fee_plus . "/100) * (1 + " . $ex_ab_fee . "/100) = " . $ex_itog;
+		    break;
+
+		    //Платим Local Currency с RUB. MasterCard. Credit
+		    case "PayCurRubMC":
+		    $ex_itog = $ex_summa / $ex_mc_usd * $ex_ab_take_usd;
+		    echo $ex_summa . " / " . $ex_mc_usd . " * " . $ex_ab_take_usd ."  = " . $ex_itog;
+		    break;
+
+		    //Платим Local Currency с RUB. Visa. Debt
+		    case "PayCurRubVisa":
+		    $ex_itog = $ex_summa / (1/$ex_visa_usd) * $ex_ab_pay_usd;
+		    echo $ex_summa . " / (1/" . $ex_visa_usd . ") * " . $ex_ab_pay_usd ."  = " . $ex_itog;
+		    break;
+
+		    //Платим Local Currency с USD. Visa. Debt
+		    case "PayCurUsdVisa":
+		    $ex_itog = $ex_summa / (1/$ex_visa_usd);
+		    echo $ex_summa . " / (1/" . $ex_visa_usd . ")  = " . $ex_itog;
+		    break;
+
+		    //Платим USD с RUB. MasterCard. Credit
+		    case "PayUsdRubMC":
+		    $ex_itog = $ex_summa / (1/$ex_ab_pay_usd);
+		    echo $ex_summa . " / (1/" . $ex_ab_pay_usd . ")  = " . $ex_itog;
+		    break;
+
+		    //Платим USD с RUB. Visa. Debt
+		    case "PayUsdRubVisa":
+		    $ex_itog = $ex_summa / (1/$ex_ab_pay_usd);
+		    echo $ex_summa . " / (1/" . $ex_ab_pay_usd . ")  = " . $ex_itog;
+		    break;
+
+		    //Платим USD с USD. Visa. Debt
+		    case "PayUsdUsdVisa":
+		    $ex_itog = $ex_summa;
+		    echo $ex_summa . "  = " . $ex_itog;
+		    break;
+
+		    //Платим EUR с RUB. MasterCard. Credit
+		    case "PayEurRubMC":
+		    $ex_itog = $ex_summa / $ex_ab_pay_eur;
+		    echo $ex_summa . " / " . $ex_ab_pay_eur . "  = " . $ex_itog;
+		    break;
+
+		    //Платим EUR с RUB. Visa. Debt
+		    case "PayEurRubMC":
+		    $ex_itog = $ex_summa / $ex_ab_pay_eur;
+		    echo $ex_summa . " / " . $ex_ab_pay_eur . "  = " . $ex_itog;
+		    break;
+
+		    //Платим EUR с USD. Visa. Debt
+		    case "PayEurUsdVisa":
+		    $ex_itog = $ex_summa / ($ex_ab_pay_usd);
+		    echo $ex_summa . " / " . $ex_ab_pay_usd . "  = " . $ex_itog;
+		    break;
+
+    	     };
+	}; // if($_POST['Exchange'])
+
+    	?>
+	</h2>
+    </body>
+
+</html>
+
+
